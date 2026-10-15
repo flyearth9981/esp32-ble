@@ -1,0 +1,16 @@
+# ESP-IDF 构建产物
+build/
+sdkconfig
+sdkconfig.old
+managed_components/
+dependencies.lock
+
+# 编辑器（.vscode 含本机绝对路径，不提交；插件会自动重建）
+.vscode/
+*.swp
+.DS_Store
+
+# 版权 / 隐私：不提交
+# Bluetooth SIG《Assigned Numbers》为第三方版权文档，及其全文抽取文本，不再分发。
+docs/Assigned_Numbers*.pdf
+company_ids_raw.txt

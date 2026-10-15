@@ -1,0 +1,34 @@
+# 目标芯片：ESP32-C5
+# [KNOWN, HIGH] C5 为 RISC-V + BLE-only（无经典蓝牙）+ 双频 Wi-Fi 6
+
+# ---- BLE 主机栈选择 ----
+# [KNOWN, MED] 对 BLE-only 场景，NimBLE 比 Bluedroid 更轻，RAM 占用更低
+CONFIG_BT_ENABLED=y
+CONFIG_BT_NIMBLE_ENABLED=y
+CONFIG_BT_BLUEDROID_ENABLED=n
+
+# ---- NimBLE observer（仅扫描，不外设/中央态除扫描外）----
+CONFIG_BT_NIMBLE_ROLE_OBSERVER=y
+CONFIG_BT_NIMBLE_ROLE_CENTRAL=y
+CONFIG_BT_NIMBLE_ROLE_PERIPHERAL=n
+CONFIG_BT_NIMBLE_ROLE_BROADCASTER=n
+
+# ---- 扫描参数默认值 ----
+CONFIG_BT_NIMBLE_EXT_ADV=y
+CONFIG_BT_NIMBLE_MAX_EXT_ADV_INSTANCES=0
+
+# ---- 串口 ----
+# ESP-IDF 默认 USB-Serial-JTAG 或 UART0；DevKitC 上通常走板载 UART 桥。
+# 若你的板子用 USB-Serial-JTAG 直连，保持默认即可。
+CONFIG_ESP_CONSOLE_UART_BAUDRATE=115200
+CONFIG_ESP_CONSOLE_SECONDARY_USB_SERIAL_JTAG=y
+
+# ---- 日志级别 ----
+# [KNOWN, HIGH] 日志与 NDJSON 抓包共用同一串口。默认 Info 级下，
+# NimBLE/系统日志会插入数据流，破坏「一行一包」的逐行解析。
+# 默认静默，只输出我们的 JSON 行。调参时把下面几行注释掉、恢复默认级别。
+CONFIG_LOG_DEFAULT_LEVEL_NONE=y
+CONFIG_LOG_MAXIMUM_EQUALS_DEFAULT=y
+
+# ---- [GUESS, LOW] 以下为占位默认值，P1 实测后按需调整 ----
+# C5 的扩展广播 / 周期广播支持完善度未验证，属 go/no-go 项（见 docs/05）。
